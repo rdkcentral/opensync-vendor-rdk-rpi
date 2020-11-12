@@ -19,7 +19,7 @@ ifeq ($(TARGET),RDKB)
 
 VENDOR = rpi
 
-BACKHAUL_SSID = "we.piranha"
+#BACKHAUL_SSID = "we.piranha"
 
 CONTROLLER_PROTO = ssl
 CONTROLLER_PORT = 443
@@ -34,7 +34,15 @@ ifeq ($(RDK_MACHINE),$(filter $(RDK_MACHINE),raspberrypi-rdk-broadband-rpi4 rasp
 RDK_OEM = rpi
 RDK_MODEL = rpi
 
+SERVICE_PROVIDERS = ALL
+export IMAGE_DEPLOYMENT_PROFILE = dev-academy
+
+ifeq ($(RDK_MACHINE), turris-extender)
+KCONFIG_TARGET ?= vendor/$(VENDOR)/kconfig/RDK_EXTENDER
+RDK_CFLAGS  += -DTURRIS_POD
+else
 KCONFIG_TARGET ?= vendor/$(VENDOR)/kconfig/RDK
+endif
 
 RDK_CFLAGS  += -Wno-absolute-value
 

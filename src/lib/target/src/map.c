@@ -27,7 +27,6 @@ limitations under the License.
 #include "log.h"
 #include "target.h"
 
-
 typedef struct
 {
     uint8_t  vif_radio_idx;
@@ -41,13 +40,15 @@ typedef struct
 // TODO: Fill with correct interfaces and bridges
 static ifmap_t  ifmap[] = {
    // idx   cloud-ifname     dev-ifname  bridge    gre-br            vlan     description
-   // { 3,    "wifi4",   "wifi4",    "brlan0", "wifi4", 0 },  // 2G onboard
-   // { 3,    "wifi5",   "wifi5",    "brlan0", "wifi5",  0 },  // 5G onboard
+#if !defined(CONFIG_RDK_EXTENDER)
+    { 3,    "wifi4",   "wifi4",    "brlan0", "wifi4", 0 },  // 2G onboard
+    { 3,    "wifi5",   "wifi5",    "brlan0", "wifi5",  0 },  // 5G onboard
     { 1,    "wifi2",   "wifi2",    "brlan0", "wifi2", 0 },  // 2G Backhaul
     { 1,    "wifi3",   "wifi3",    "brlan0", "wifi3",  0 },  // 5G Backhaul
     { 2,    "wifi0",    "wifi0",    "brlan0",  NULL,            0 },  // 2G User SSID
     { 2,    "wifi1",    "wifi1",    "brlan0",  NULL,            0 },  // 5G User SSID
-    { 0,    NULL,            NULL,       NULL,     NULL,             0 }
+#endif
+    { 0,    NULL,            NULL,        NULL,     NULL,            0 }
 };
 
 
@@ -56,18 +57,17 @@ bool target_map_ifname_init(void)
     static bool init = false;
     ifmap_t     *mp;
 
-    if (init)
+    if (init == true)
     {
         return true;
     }
     init = true;
-
     target_map_init();
 
     // Register cloud <-> device interface mappings
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         target_map_insert(mp->cloud_ifname, mp->device_ifname);
 
@@ -82,7 +82,7 @@ char* target_map_ifname_to_bridge(const char *ifname)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (!strcmp(ifname, mp->device_ifname) || !strcmp(ifname, mp->cloud_ifname))
         {
@@ -100,7 +100,7 @@ char* target_map_ifname_to_gre_bridge(const char *ifname)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while(mp->device_ifname != NULL)
     {
         if (!strcmp(ifname, mp->device_ifname) || !strcmp(ifname, mp->cloud_ifname))
         {
@@ -118,7 +118,7 @@ uint16_t target_map_ifname_to_vlan(const char *ifname)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (!strcmp(ifname, mp->device_ifname) || !strcmp(ifname, mp->cloud_ifname))
         {
@@ -136,7 +136,7 @@ uint8_t target_map_ifname_to_vif_radio_idx(const char *ifname)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (!strcmp(ifname, mp->device_ifname) || !strcmp(ifname, mp->cloud_ifname))
         {
@@ -154,7 +154,7 @@ uint16_t target_map_bridge_to_vlan(const char *bridge)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (!strcmp(bridge, mp->bridge))
         {
@@ -172,7 +172,7 @@ char* target_map_vlan_to_bridge(uint16_t vlan_id)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (vlan_id == mp->vlan_id)
         {
@@ -190,7 +190,7 @@ bool target_map_update_vlan(const char *ifname, uint16_t vlan_id)
     ifmap_t     *mp;
 
     mp = ifmap;
-    while (mp->device_ifname)
+    while (mp->device_ifname != NULL)
     {
         if (!strcmp(ifname, mp->device_ifname) || !strcmp(ifname, mp->cloud_ifname))
         {
