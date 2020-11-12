@@ -77,48 +77,6 @@ cat << EOF
             "network": true,
             "enabled": true
        }
-    },
-    {
-        "op":"insert",
-        "table":"Wifi_Inet_Config",
-        "row": {
-            "if_name": "wifi4",
-            "ip_assign_scheme": "static",
-            "if_type": "vif",
-            "mtu": 1600,
-            "inet_addr": "169.254.0.129",
-            "netmask":"255.255.255.128",
-            "dhcpd":  ["map",[
-                              ["dhcp_option","26, 1600"],
-                              ["force","false"],
-                              ["lease_time", "12h"],
-                              ["start", "169.254.0.130"],
-                              ["stop", "169.254.0.254"]
-                      ]],
-            "network": true,
-            "enabled": true
-       }
-    },
-    {
-        "op":"insert",
-        "table":"Wifi_Inet_Config",
-        "row": {
-            "if_name": "wifi5",
-            "ip_assign_scheme": "static",
-            "if_type": "vif",
-            "mtu": 1600,
-            "inet_addr": "169.254.1.129",
-            "netmask":"255.255.255.128",
-            "dhcpd":  ["map",[
-                              ["dhcp_option","26, 1600"],
-                              ["force","false"],
-                              ["lease_time", "12h"],
-                              ["start", "169.254.1.130"],
-                              ["stop", "169.254.1.252"]
-                      ]],
-            "network": true,
-            "enabled": true
-       }
     }
 
 ]
