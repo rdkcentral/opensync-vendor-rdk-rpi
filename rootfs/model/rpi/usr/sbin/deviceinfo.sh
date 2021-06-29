@@ -20,7 +20,7 @@
 case "$1" in
 
     -mo)
-        echo "RTROM01-2G"
+        echo "RTROM01-2G-EX"
         ;;
     -sn)
         echo "1234567890"
@@ -29,7 +29,12 @@ case "$1" in
         echo "rdk-yocto-rpi"
         ;;
     -cmac)
-	echo $(cat /sys/class/net/erouter0/address)
+        if [ -f /sys/class/net/erouter0/address ]; then          
+            CMAC=$(cat /sys/class/net/erouter0/address)             
+        else                                                        
+            CMAC=$(cat /sys/class/net/eth0/address)                      
+        fi
+        echo $CMAC
         ;;
     -cip)
 	echo $(ip addr show brlan0 | grep 'inet ' | awk '{print $2}' | cut -f1 -d'/')
@@ -38,7 +43,12 @@ case "$1" in
         echo ""
         ;;
     -emac)
-	echo $(cat /sys/class/net/erouter0/address)
+       if [ -f /sys/class/net/erouter0/address ]; then                              
+            EMAC=$(cat /sys/class/net/erouter0/address)                              
+        else                                           
+            EMAC=$(cat /sys/class/net/eth0/address)                                  
+        fi                                                                           
+        echo $EMAC
         ;;
     -eip)
 	echo $(ip addr show erouter0 | grep 'inet ' | awk '{print $2}' | cut -f1 -d'/')
