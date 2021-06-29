@@ -1,0 +1,70 @@
+platform_prereq_check() {
+    # Check to see if prerequisites are met.  Won't start managers if 1 is returned
+    return 0
+}
+
+platform_start() {
+    # Called just before starting managers
+    # === Start Network interfaces ===
+
+    ovs-vsctl add-br br-wan -- set bridge br-wan other-config:hwaddr=\"$(cat /sys/class/net/eth0/address)\"
+    ifconfig eth0 up
+    ip link add link eth0 name eth0.4 type vlan id 4
+    ifconfig eth0.4 up
+
+    # == LAN ==
+    ovs-vsctl add-br brlan0
+
+    ifconfig brlan0 up
+
+    # == VAPs ==
+
+    # home-ap-24
+    iw dev wlan0 interface add wifi0 type __ap
+    ovs-vsctl add-port brlan0 wifi0
+
+    # home-ap-50
+    iw dev wlan1 interface add wifi1 type __ap
+    ovs-vsctl add-port brlan0 wifi1
+
+    # bhaul-ap-24
+    iw dev wlan0 interface add wifi2 type __ap
+
+    # bhaul-ap-50
+    iw dev wlan1 interface add wifi3 type __ap
+
+    # onboard-ap-24
+    iw dev wlan0 interface add wifi4 type __ap
+
+    # onboard-ap-50
+    iw dev wlan1 interface add wifi5 type __ap
+
+    # == STA ==
+
+    # bhaul-sta-24
+    iw dev wlan1 interface add bhaul-sta-24 type managed
+
+    # bhaul-sta-50
+    iw dev wlan1 interface add bhaul-sta-50 type managed
+
+    touch /tmp/hostapd-acl0
+    touch /tmp/hostapd-acl1
+    touch /tmp/hostapd-acl2
+    touch /tmp/hostapd-acl3
+    touch /tmp/hostapd0.psk
+    touch /tmp/hostapd1.psk
+    touch /tmp/bhaul-sta-24.conf
+    touch /tmp/bhaul-sta-50.conf
+
+    wpa_cli -g/var/run/wpa_supplicant-global interface_add bhaul-sta-24 /tmp/bhaul-sta-24.conf nl80211 /var/run/wpa_supplicant
+    wpa_cli -g/var/run/wpa_supplicant-global interface_add bhaul-sta-50 /tmp/bhaul-sta-50.conf nl80211 /var/run/wpa_supplicant
+    /usr/opensync/tools/ovsh u Wifi_Inet_Config -w if_name==brlan0 network:=true
+
+    return 0
+}
+
+platform_stop() {
+    # Called after stopping managers
+    return 0
+}
+
