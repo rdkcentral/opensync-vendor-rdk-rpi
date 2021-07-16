@@ -29,7 +29,7 @@ VERSION_NO_BUILDNUM = 1
 VERSION_NO_SHA1 = 1
 VERSION_NO_PROFILE = 1
 
-ifeq ($(RDK_MACHINE),$(filter $(RDK_MACHINE),raspberrypi-rdk-broadband-rpi4 raspberrypi-rdk-extender-rpi4))
+ifeq ($(RDK_MACHINE),$(filter $(RDK_MACHINE),raspberrypi4-rdk-broadband raspberrypi4-rdk-extender))
 
 RDK_OEM = rpi
 RDK_MODEL = rpi
