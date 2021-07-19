@@ -37,7 +37,7 @@ RDK_MODEL = rpi
 SERVICE_PROVIDERS = ALL
 export IMAGE_DEPLOYMENT_PROFILE = dev-academy
 
-ifeq ($(RDK_MACHINE), raspberrypi-rdk-extender-rpi4)
+ifeq ($(RDK_MACHINE), raspberrypi4-rdk-extender)
 KCONFIG_TARGET ?= vendor/$(VENDOR)/kconfig/RDK_EXTENDER
 RDK_CFLAGS  += -DTURRIS_POD
 else
