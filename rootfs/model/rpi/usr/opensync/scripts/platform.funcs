@@ -42,7 +42,7 @@ platform_start() {
     # == STA ==
 
     # bhaul-sta-24
-    iw dev wlan1 interface add bhaul-sta-24 type managed
+    iw dev wlan0 interface add bhaul-sta-24 type managed
 
     # bhaul-sta-50
     iw dev wlan1 interface add bhaul-sta-50 type managed
