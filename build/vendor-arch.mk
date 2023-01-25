@@ -14,9 +14,11 @@
 #WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #See the License for the specific language governing permissions and
 #limitations under the License.
+RDK_TARGETS = RDKB raspberrypi4-rdk-broadband raspberrypi4-rdk-extender
 
-ifeq ($(TARGET),RDKB)
+ifneq ($(filter $(TARGET),$(RDK_TARGETS)),)
 
+OS_TARGETS += $(RDK_TARGETS)
 VENDOR = rpi
 
 #BACKHAUL_SSID = "we.piranha"
@@ -29,15 +31,15 @@ VERSION_NO_BUILDNUM = 1
 VERSION_NO_SHA1 = 1
 VERSION_NO_PROFILE = 1
 
-ifeq ($(RDK_MACHINE),$(filter $(RDK_MACHINE),raspberrypi4-rdk-broadband raspberrypi4-rdk-extender))
+#ifeq ($(RDK_MACHINE),$(filter $(RDK_MACHINE),raspberrypi4-rdk-broadband raspberrypi4-rdk-extender))
 
 RDK_OEM = rpi
 RDK_MODEL = rpi
 
 SERVICE_PROVIDERS = ALL
-export IMAGE_DEPLOYMENT_PROFILE = dev-academy
+export IMAGE_DEPLOYMENT_PROFILE = $(OPENSYNC_SERVICE_PROVIDER_SUFFIX)
 
-ifeq ($(RDK_MACHINE), raspberrypi4-rdk-extender)
+ifeq ($(TARGET),$(filter $(TARGET),RDKB raspberrypi4-rdk-extender))
 KCONFIG_TARGET ?= vendor/$(VENDOR)/kconfig/RDK_EXTENDER
 RDK_CFLAGS  += -DTURRIS_POD
 else
@@ -46,8 +48,8 @@ endif
 
 RDK_CFLAGS  += -Wno-absolute-value
 
-else
-$(error Unsupported RDK_MACHINE ($(RDK_MACHINE)).)
-endif
+#else
+#$(error Unsupported RDK_MACHINE ($(RDK_MACHINE)).)
+#endif
 
 endif
