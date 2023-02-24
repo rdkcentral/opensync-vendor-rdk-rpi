@@ -14,7 +14,7 @@
 #WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #See the License for the specific language governing permissions and
 #limitations under the License.
-RDK_TARGETS = RDKB raspberrypi4-rdk-broadband raspberrypi4-rdk-extender
+RDK_TARGETS = RDKB raspberrypi4-rdk-broadband raspberrypi4-rdk-extender raspberrypi-rdk-broadband raspberrypi4-64-rdk-broadband
 
 ifneq ($(filter $(TARGET),$(RDK_TARGETS)),)
 
