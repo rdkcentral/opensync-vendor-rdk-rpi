@@ -14,7 +14,6 @@
 #limitations under the License.
 
 UNIT_CFLAGS  := $(filter-out -DTARGET_H=%,$(UNIT_CFLAGS))
-UNIT_CFLAGS  += -DTARGET_H=\"target_template.h\"
 UNIT_CFLAGS  += -I$(OVERRIDE_DIR)/inc
 
 UNIT_SRC_TOP += $(OVERRIDE_DIR)/src/map.c
